@@ -11,10 +11,17 @@ function parseTerseTable(output: string): string[][] {
     .map((line) => line.split(":"));
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 export class NetworkManager {
   constructor(
     private readonly config: AppConfig,
-    private readonly commandRunner: CommandRunner = nodeCommandRunner
+    private readonly commandRunner: CommandRunner = nodeCommandRunner,
+    private readonly scanSettleMs = 3000
   ) {}
 
   async status(): Promise<NetworkStatus> {
@@ -40,11 +47,31 @@ export class NetworkManager {
   }
 
   async scan(): Promise<WifiNetwork[]> {
-    await this.commandRunner
-      .execFile("sudo", ["nmcli", "device", "wifi", "rescan", "ifname", this.config.wifiInterface])
-      .catch(() => undefined);
+    await this.commandRunner.execFile("sudo", ["nmcli", "radio", "wifi", "on"]);
+    await this.commandRunner.execFile("sudo", [
+      "nmcli",
+      "device",
+      "set",
+      this.config.wifiInterface,
+      "managed",
+      "yes"
+    ]);
+    await this.ensureWifiAvailable();
+    await this.commandRunner.execFile("sudo", [
+      "nmcli",
+      "--wait",
+      "15",
+      "device",
+      "wifi",
+      "rescan",
+      "ifname",
+      this.config.wifiInterface
+    ]);
+    await sleep(this.scanSettleMs);
 
     const result = await this.commandRunner.execFile("nmcli", [
+      "--wait",
+      "15",
       "-t",
       "-f",
       "SSID,SIGNAL,SECURITY",
@@ -52,7 +79,9 @@ export class NetworkManager {
       "wifi",
       "list",
       "ifname",
-      this.config.wifiInterface
+      this.config.wifiInterface,
+      "--rescan",
+      "yes"
     ]);
 
     const networks = new Map<string, WifiNetwork>();
@@ -73,6 +102,28 @@ export class NetworkManager {
       }
     }
     return [...networks.values()].sort((a, b) => (b.signal || 0) - (a.signal || 0));
+  }
+
+  private async ensureWifiAvailable(): Promise<void> {
+    const result = await this.commandRunner.execFile("nmcli", [
+      "-t",
+      "-f",
+      "DEVICE,TYPE,STATE",
+      "device"
+    ]);
+    const rows = parseTerseTable(result.stdout);
+    const wifiRow = rows.find((row) => row[0] === this.config.wifiInterface);
+    if (!wifiRow) {
+      throw new Error(`Wi-Fi interface ${this.config.wifiInterface} was not found.`);
+    }
+    if (wifiRow[1] !== "wifi") {
+      throw new Error(`${this.config.wifiInterface} is not a Wi-Fi device.`);
+    }
+    if (wifiRow[2] === "unavailable") {
+      throw new Error(
+        `${this.config.wifiInterface} is unavailable. Check rfkill, Wi-Fi country/regulatory settings, and that NetworkManager manages the interface.`
+      );
+    }
   }
 
   async connectWifi(ssid: string, password: string): Promise<void> {
