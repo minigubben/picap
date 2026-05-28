@@ -25,7 +25,9 @@
         <select name="ssid" data-wifi-networks class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600">
           <option value="">Scan for networks</option>
         </select>
+        <input name="manualSsid" placeholder="Manual SSID" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
         <input type="password" name="password" placeholder="Wi-Fi password" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+        <p class="text-xs leading-5 text-zinc-500" data-wifi-scan-status>Scan for networks or enter an SSID manually.</p>
         <button type="submit" class="border border-zinc-700 bg-zinc-100 px-4 py-3 text-sm font-medium text-black transition hover:bg-zinc-300">
           Connect
         </button>

@@ -40,6 +40,10 @@ export class NetworkManager {
   }
 
   async scan(): Promise<WifiNetwork[]> {
+    await this.commandRunner
+      .execFile("sudo", ["nmcli", "device", "wifi", "rescan", "ifname", this.config.wifiInterface])
+      .catch(() => undefined);
+
     const result = await this.commandRunner.execFile("nmcli", [
       "-t",
       "-f",
@@ -48,9 +52,7 @@ export class NetworkManager {
       "wifi",
       "list",
       "ifname",
-      this.config.wifiInterface,
-      "--rescan",
-      "yes"
+      this.config.wifiInterface
     ]);
 
     const networks = new Map<string, WifiNetwork>();

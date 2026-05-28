@@ -98,7 +98,11 @@ export function registerApiRoutes(app: Express, services: AppServices): void {
 
   app.post("/network/wifi/connect", async (req, res) => {
     try {
-      await services.networkManager.connectWifi(String(req.body.ssid || ""), String(req.body.password || ""));
+      const ssid = String(req.body.manualSsid || req.body.ssid || "").trim();
+      if (!ssid) {
+        throw new Error("SSID is required.");
+      }
+      await services.networkManager.connectWifi(ssid, String(req.body.password || ""));
       res.json({ ok: true });
     } catch (error) {
       sendError(res, error);
