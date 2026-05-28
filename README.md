@@ -50,11 +50,11 @@ pnpm run hash-password -- 'your-password'
 
 ```bash
 sudo scripts/install.sh
-sudoedit /env/picap.env
+sudoedit /etc/picap.env
 sudo systemctl enable --now picap
 ```
 
-Example `/env/picap.env`:
+Example `/etc/picap.env`:
 
 ```text
 PICAP_PASSWORD_HASH=$2b$12$...
@@ -65,7 +65,7 @@ PICAP_DB_PATH=/var/lib/picap/picap.sqlite3
 
 ## Notes
 
-- Production runtime configuration lives in `/env/picap.env`.
+- Production runtime configuration lives in `/etc/picap.env`.
 - Local development still uses the ignored project-root `.env` file through `pnpm run dev`.
 - The app runs as the `picap` user.
 - `sudoers` grants access to `tcpdump` and `nmcli` only.

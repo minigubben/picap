@@ -3,7 +3,7 @@ set -euo pipefail
 
 APP_DIR=/opt/picap
 DATA_DIR=/var/lib/picap
-ENV_DIR=/env
+ENV_DIR=/etc
 ENV_FILE=${ENV_DIR}/picap.env
 SERVICE_USER=picap
 

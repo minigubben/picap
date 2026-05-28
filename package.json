@@ -7,7 +7,7 @@
   "main": "dist/src/server.js",
   "packageManager": "pnpm@10.33.4",
   "scripts": {
-    "start": "node --env-file=/env/picap.env dist/src/server.js",
+    "start": "node --env-file=/etc/picap.env dist/src/server.js",
     "build:node": "rm -rf dist && tsc -p tsconfig.node.json && mkdir -p dist/src && cp -R src/views dist/src/views && cp -R src/public dist/src/public",
     "build:client": "vite build",
     "build": "pnpm run build:node && pnpm run build:client",
