@@ -17,6 +17,7 @@ test("builds rotated tcpdump args", async () => {
     sessionSecret: "secret",
     captureDir: path.join(dir, "captures"),
     dbPath: path.join(dir, "picap.sqlite3"),
+    tcpdumpUser: "picap",
     captureInterface: "eth0",
     wifiInterface: "wlan0",
     maxTotalCaptureGb: 32,
@@ -34,6 +35,8 @@ test("builds rotated tcpdump args", async () => {
     bpfFilter: "tcp and port 443"
   }), [
     "tcpdump",
+    "-Z",
+    "picap",
     "-i",
     "eth0",
     "-nn",

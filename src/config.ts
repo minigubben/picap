@@ -1,3 +1,4 @@
+import os from "node:os";
 import path from "node:path";
 
 export interface AppConfig {
@@ -7,6 +8,7 @@ export interface AppConfig {
   sessionSecret: string;
   captureDir: string;
   dbPath: string;
+  tcpdumpUser: string;
   captureInterface: string;
   wifiInterface: string;
   maxTotalCaptureGb: number;
@@ -43,6 +45,7 @@ export function loadConfig(): AppConfig {
     sessionSecret: requiredEnv("PICAP_SESSION_SECRET"),
     captureDir: path.resolve(process.env.PICAP_CAPTURE_DIR || "./data/captures"),
     dbPath: path.resolve(process.env.PICAP_DB_PATH || "./data/picap.sqlite3"),
+    tcpdumpUser: process.env.PICAP_TCPDUMP_USER || os.userInfo().username,
     captureInterface: process.env.PICAP_CAPTURE_INTERFACE || "eth0",
     wifiInterface: process.env.PICAP_WIFI_INTERFACE || "wlan0",
     maxTotalCaptureGb: numberEnv("PICAP_MAX_TOTAL_CAPTURE_GB", 32),

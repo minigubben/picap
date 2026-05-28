@@ -79,6 +79,8 @@ export class CaptureManager {
     );
     const args = [
       "tcpdump",
+      "-Z",
+      this.config.tcpdumpUser,
       "-i",
       input.interfaceName,
       "-nn",

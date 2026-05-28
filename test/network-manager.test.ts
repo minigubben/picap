@@ -12,6 +12,7 @@ const config: AppConfig = {
   sessionSecret: "secret",
   captureDir: "/tmp/captures",
   dbPath: "/tmp/picap.sqlite3",
+  tcpdumpUser: "picap",
   captureInterface: "eth0",
   wifiInterface: "wlan0",
   maxTotalCaptureGb: 32,
