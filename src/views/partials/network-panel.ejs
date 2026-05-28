@@ -1,0 +1,56 @@
+<section class="border-b border-zinc-800 px-5 py-5">
+  <p class="mb-3 text-xs uppercase tracking-[0.34em] text-zinc-500">Management Network</p>
+  <div class="mb-4 border border-zinc-800 bg-zinc-950/70 px-4 py-4">
+    <div class="text-sm text-zinc-300">
+      Interface: <code><%= services.config.wifiInterface %></code>
+    </div>
+    <div class="mt-2 text-sm text-zinc-300">
+      Mode: <code data-network-mode><%= networkStatus.mode %></code>
+    </div>
+    <div class="mt-2 text-sm text-zinc-300">
+      SSID: <code data-network-ssid><%= networkStatus.ssid || "none" %></code>
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <div class="border border-zinc-800 bg-zinc-950/70 px-4 py-4">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <p class="text-xs uppercase tracking-[0.28em] text-zinc-500">Wi-Fi Client</p>
+        <button type="button" data-wifi-scan class="border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm font-medium text-zinc-100 transition hover:bg-zinc-800">
+          Scan
+        </button>
+      </div>
+      <form action="/network/wifi/connect" method="post" data-api-form data-confirm="Changing Wi-Fi may disconnect this browser session." class="space-y-3">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <select name="ssid" data-wifi-networks class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600">
+          <option value="">Scan for networks</option>
+        </select>
+        <input type="password" name="password" placeholder="Wi-Fi password" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+        <button type="submit" class="border border-zinc-700 bg-zinc-100 px-4 py-3 text-sm font-medium text-black transition hover:bg-zinc-300">
+          Connect
+        </button>
+      </form>
+    </div>
+
+    <div class="border border-zinc-800 bg-zinc-950/70 px-4 py-4">
+      <p class="mb-3 text-xs uppercase tracking-[0.28em] text-zinc-500">Hotspot</p>
+      <form action="/network/hotspot/start" method="post" data-api-form data-confirm="Starting hotspot may disconnect this browser session." class="space-y-3">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <input name="ssid" value="PiCap" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+        <input type="password" name="password" placeholder="Hotspot passphrase" required minlength="8" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+        <div class="grid grid-cols-2 gap-3">
+          <input name="country" value="US" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+          <input name="channel" placeholder="channel" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button type="submit" class="border border-zinc-700 bg-zinc-100 px-4 py-3 text-sm font-medium text-black transition hover:bg-zinc-300">
+            Start hotspot
+          </button>
+          <button type="button" data-api-action data-method="POST" data-action="/network/hotspot/stop" data-confirm="Stopping hotspot may disconnect this browser session." class="border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm font-medium text-zinc-100 transition hover:bg-zinc-800">
+            Stop hotspot
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

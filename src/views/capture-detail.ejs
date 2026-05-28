@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= brand.name %> | <%= capture.name %></title>
+    <link rel="icon" type="image/svg+xml" href="<%= brand.faviconPath %>" />
+    <% (clientAssets?.css || []).forEach((href) => { %>
+      <link rel="stylesheet" href="<%= href %>" />
+    <% }) %>
+  </head>
+  <body class="min-h-screen bg-black text-zinc-100 antialiased">
+    <main class="mx-auto max-w-[1800px] px-5 py-5">
+      <a href="/" class="text-sm text-zinc-300 underline decoration-zinc-700 underline-offset-4">Back to dashboard</a>
+      <section class="mt-5 border border-zinc-800 bg-zinc-950/70 px-5 py-5">
+        <p class="text-xs uppercase tracking-[0.34em] text-zinc-500">Capture #<%= capture.id %></p>
+        <h1 class="mt-3 text-4xl font-semibold text-zinc-50"><%= capture.name %></h1>
+        <div class="mt-5 grid gap-3 md:grid-cols-3">
+          <div class="border border-zinc-800 bg-black/40 px-4 py-3">Status: <code><%= capture.status %></code></div>
+          <div class="border border-zinc-800 bg-black/40 px-4 py-3">Interface: <code><%= capture.interfaceName %></code></div>
+          <div class="border border-zinc-800 bg-black/40 px-4 py-3">Chunks: <code><%= capture.files.length %></code></div>
+        </div>
+        <pre class="mt-5 overflow-x-auto border border-zinc-800 bg-[#050505] px-4 py-4 text-xs leading-6 text-zinc-200"><%= capture.bpfFilter || "no filter" %></pre>
+      </section>
+      <section class="mt-5 border border-zinc-800 bg-zinc-950/70 px-5 py-5">
+        <p class="mb-3 text-xs uppercase tracking-[0.34em] text-zinc-500">Capture Artifacts</p>
+        <div class="space-y-2">
+          <% capture.files.forEach((file) => { %>
+            <a href="/captures/<%= capture.id %>/files/<%= file.id %>/download" class="block border border-zinc-800 bg-black/40 px-3 py-3 transition hover:bg-zinc-900">
+              <span class="block truncate text-sm text-zinc-100"><%= file.filename %></span>
+              <span class="mt-1 block text-xs uppercase tracking-[0.22em] text-zinc-500"><%= formatBytes(file.sizeBytes) %></span>
+            </a>
+          <% }) %>
+          <% if (!capture.files.length) { %>
+            <p class="text-sm text-zinc-500">No chunks indexed yet.</p>
+          <% } %>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

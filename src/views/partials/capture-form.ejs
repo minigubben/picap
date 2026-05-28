@@ -1,0 +1,85 @@
+<section class="border-b border-zinc-800 px-5 py-5">
+  <p class="mb-3 text-xs uppercase tracking-[0.34em] text-zinc-500">New Capture</p>
+  <form action="/captures" method="post" data-api-form data-refresh-after="true" class="space-y-4">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    <div class="space-y-2">
+      <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Name</label>
+      <input name="name" placeholder="mirror-port-investigation" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Duration</label>
+        <input type="number" min="1" name="durationValue" value="2" required class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+      </div>
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Unit</label>
+        <select name="durationUnit" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600">
+          <option value="minutes">minutes</option>
+          <option value="hours">hours</option>
+          <option value="days">days</option>
+          <option value="weeks">weeks</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-4">
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Interface</label>
+        <input name="interfaceName" value="<%= services.config.captureInterface %>" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+      </div>
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Chunk Sec</label>
+        <input type="number" min="1" name="chunkSeconds" value="<%= services.config.defaultChunkSeconds %>" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+      </div>
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Chunk MB</label>
+        <input type="number" min="1" name="chunkMb" value="<%= services.config.defaultChunkMb %>" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+      </div>
+    </div>
+    <div class="space-y-2">
+      <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Job Limit GB</label>
+      <input type="number" min="0.1" step="0.1" name="maxJobGb" value="4" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+    </div>
+    <div class="grid grid-cols-1 gap-4 xl:grid-cols-2">
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">IP / CIDR</label>
+        <input name="ip" placeholder="192.168.1.10" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+      </div>
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Port</label>
+        <input type="number" min="1" max="65535" name="port" placeholder="443" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+      </div>
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Source IP</label>
+        <input name="srcIp" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+      </div>
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Destination IP</label>
+        <input name="dstIp" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+      </div>
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Source Port</label>
+        <input type="number" min="1" max="65535" name="srcPort" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+      </div>
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Destination Port</label>
+        <input type="number" min="1" max="65535" name="dstPort" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600" />
+      </div>
+      <div class="space-y-2 xl:col-span-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Protocol</label>
+        <select name="protocol" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600">
+          <option value="any">any</option>
+          <option value="tcp">tcp</option>
+          <option value="udp">udp</option>
+          <option value="icmp">icmp</option>
+        </select>
+      </div>
+      <div class="space-y-2 xl:col-span-2">
+        <label class="block text-xs uppercase tracking-[0.28em] text-zinc-500">Advanced BPF</label>
+        <textarea name="advancedBpf" rows="3" placeholder="tcp and host 192.168.1.10 and port 443" class="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-600"></textarea>
+      </div>
+    </div>
+    <button type="submit" class="border border-zinc-700 bg-zinc-100 px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-300">
+      Start capture
+    </button>
+  </form>
+</section>

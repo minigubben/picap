@@ -1,0 +1,18 @@
+[Unit]
+Description=PiCap packet capture web appliance
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=picap
+Group=picap
+WorkingDirectory=/opt/picap
+EnvironmentFile=-/etc/picap.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node dist/src/server.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,57 @@
+<section class="space-y-5">
+  <% if (!captures.length) { %>
+    <p class="text-sm text-zinc-500">No captures yet.</p>
+  <% } %>
+  <% captures.forEach((capture) => { %>
+    <details id="capture-<%= capture.id %>" class="border border-zinc-800 bg-black/70" <%= capture.status === "running" ? "open" : "" %>>
+      <summary class="flex cursor-pointer list-none flex-wrap items-center justify-between gap-3 border-b border-zinc-800 px-4 py-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.28em] text-zinc-500">Capture #<%= capture.id %></p>
+          <h3 class="mt-2 text-xl font-semibold text-zinc-50"><%= capture.name %></h3>
+          <p class="mt-2 text-xs uppercase tracking-[0.22em] text-zinc-500">
+            <%= capture.interfaceName %> · <%= capture.files.length %> chunks · <%= formatBytes(capture.files.reduce((sum, file) => sum + file.sizeBytes, 0)) %>
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-xs uppercase tracking-[0.24em] text-zinc-500">Expand</span>
+          <span class="border border-zinc-800 px-3 py-1 text-xs uppercase tracking-[0.24em] text-zinc-200"><%= capture.status %></span>
+        </div>
+      </summary>
+      <div class="space-y-4 px-4 py-4 text-sm text-zinc-400">
+        <div>Filter: <code class="text-zinc-200"><%= capture.bpfFilter || "none" %></code></div>
+        <div>Started: <code class="text-zinc-200"><%= formatDate(capture.startedAt) %></code></div>
+        <div>Ended: <code class="text-zinc-200"><%= formatDate(capture.endedAt) %></code></div>
+        <% if (capture.errorMessage) { %>
+          <p class="border border-red-950 bg-red-950/30 px-4 py-3 text-sm text-red-200"><%= capture.errorMessage %></p>
+        <% } %>
+        <div class="flex flex-wrap gap-3">
+          <% if (capture.status === "running") { %>
+            <button type="button" data-api-action data-method="POST" data-action="/captures/<%= capture.id %>/stop" class="border border-zinc-700 bg-zinc-100 px-4 py-2.5 text-sm font-medium text-black transition hover:bg-zinc-300">
+              Stop
+            </button>
+          <% } %>
+          <a href="/captures/<%= capture.id %>" class="border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm font-medium text-zinc-100 transition hover:bg-zinc-800">
+            Open details
+          </a>
+          <button type="button" data-api-action data-method="POST" data-action="/captures/<%= capture.id %>/delete" data-confirm="Delete this capture and all pcap files?" class="border border-red-950 bg-red-950/20 px-4 py-2.5 text-sm font-medium text-red-100 transition hover:bg-red-900/40">
+            Delete
+          </button>
+        </div>
+        <div class="border border-zinc-800 bg-zinc-950/70 px-4 py-4">
+          <p class="mb-3 text-xs uppercase tracking-[0.28em] text-zinc-500">Capture Artifacts</p>
+          <% if (!capture.files.length) { %>
+            <p class="text-sm text-zinc-500">No chunks indexed yet.</p>
+          <% } %>
+          <div class="space-y-2">
+            <% capture.files.forEach((file) => { %>
+              <a href="/captures/<%= capture.id %>/files/<%= file.id %>/download" class="block border border-zinc-800 bg-black/40 px-3 py-3 transition hover:bg-zinc-900">
+                <span class="block truncate text-sm text-zinc-100"><%= file.filename %></span>
+                <span class="mt-1 block text-xs uppercase tracking-[0.22em] text-zinc-500"><%= formatBytes(file.sizeBytes) %></span>
+              </a>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </details>
+  <% }) %>
+</section>
