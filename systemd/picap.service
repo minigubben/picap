@@ -9,7 +9,7 @@ User=picap
 Group=picap
 WorkingDirectory=/opt/picap
 Environment=NODE_ENV=production
-ExecStart=/usr/bin/node --env-file=.env dist/src/server.js
+ExecStart=/usr/bin/node --env-file=/env/picap.env dist/src/server.js
 Restart=on-failure
 RestartSec=5
 
